@@ -1,5 +1,3 @@
-
-
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.Random;
@@ -21,7 +19,7 @@ public class Main
 			public void run()
 			{
 				Toolkit.shutdown();
-				System.out.println("JVM was forcibly terminated");		
+				System.out.println("JVM was forcibly terminated");
 			}
 		});
 
@@ -30,7 +28,7 @@ public class Main
 
 		Toolkit.init();
 
-		CellularAutomaton gol = new CellularAutomaton(0.5f, Toolkit.getScreenWidth(),Toolkit.getScreenHeight());
+		CellularAutomaton gol = new CellularAutomaton(0.0125f, Toolkit.getScreenWidth(),Toolkit.getScreenHeight());
 
 		while(true)
 		{

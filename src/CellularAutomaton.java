@@ -3,8 +3,8 @@ import jcurses.system.Toolkit;
 
 public class CellularAutomaton
 {
-	public static final CharColor alive = new CharColor(CharColor.GREEN, CharColor.BLACK);
-	public static final CharColor dead = new CharColor(CharColor.BLACK, CharColor.WHITE);
+	public static final CharColor fg = new CharColor(CharColor.WHITE, CharColor.BLACK);
+	public static final CharColor bg = new CharColor(CharColor.BLACK, CharColor.WHITE);
 
 	public int numOverpop = 4;	//if the number of neighbors exceeds this, die
 	public int numUnderpop = 2;	//if this exceeds the number of neighbors, die 
@@ -20,13 +20,11 @@ public class CellularAutomaton
 		populate(chanceToStartAlive);
 	}
 
-	//returns the value of the given cell, and false if it is out of bounds
+	//returns the value of the given cell
+	//if given cell is out of bounds, uses mod to wrap back around
 	public boolean getCell(int x, int y)
 	{
-		if(y < getHeight()&& y >= 0 && x < getWidth() && x >= 0)
-			return data[y][x];
-		else
-			return false;
+		return data[Math.abs(y) % getHeight()][Math.abs(x) % getWidth()];
 	}
 
 	public int getWidth()
@@ -51,13 +49,12 @@ public class CellularAutomaton
 	public void paint()
 	{
 		Toolkit.startPainting();
+		Toolkit.clearScreen(bg);
 
 		for(int y = 0; y < getHeight(); y++)
 			for(int x = 0; x < getWidth(); x++)
 				if(data[y][x])
-					Toolkit.printString("O",x,y,alive);
-				else
-					Toolkit.printString("X",x,y,dead);
+					Toolkit.printString(" ",x,y,fg);
 
 		Toolkit.endPainting();
 	}
@@ -91,10 +88,10 @@ public class CellularAutomaton
 				int numNeighbors = getNeighborCount(x,y);
 
 				//if the cell has too few or too many neighbors, kill it
-				if(numNeighbors < numUnderpop || numNeighbors > numOverpop)
+				if(getCell(x,y) && (numNeighbors < numUnderpop || numNeighbors > numOverpop))
 					newData[y][x] = false;
 				//if the cell has the right number of neighbors, revive it
-				else if(numNeighbors == numRepop)
+				else if(!getCell(x,y) && numNeighbors == numRepop)
 					newData[y][x] = true;
 			}
 
