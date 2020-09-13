@@ -20,11 +20,27 @@ public class CellularAutomaton
 		populate(chanceToStartAlive);
 	}
 
+	//returns true if there are no cells left alive
+	public boolean isEmpty()
+	{
+		boolean isEmpty = false;
+
+		for(int y = 0; y < getHeight(); y++)
+			for(int x = 0; x < getWidth(); x++)
+				isEmpty |= !getCell(x,y);
+
+		return isEmpty;
+	}
+
+
 	//returns the value of the given cell
 	//if given cell is out of bounds, uses mod to wrap back around
 	public boolean getCell(int x, int y)
 	{
-		return data[Math.abs(y) % getHeight()][Math.abs(x) % getWidth()];
+		if(x < 0 || y < 0)
+			return false;
+		else
+			return data[y % getHeight()][x % getWidth()];
 	}
 
 	public int getWidth()
